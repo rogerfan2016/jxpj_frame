@@ -1,0 +1,71 @@
+/* Write your styles */
+/*底部TabBar样式*/
+.am-navbar-default .am-navbar-nav {
+    background-color: #FAFAFA;
+    border-top: 0.1rem solid #e7e7e7;
+
+}
+
+/*底部TabBar图标字体颜色*/
+.am-navbar-default a {
+    color:#919191;
+}
+
+/* 头部背景颜色 */
+.am-header-default {
+    background-color: #1157AA;
+}
+
+.am-gallery-title {
+    text-align: center;
+}
+
+
+.am-gallery-item {
+    text-align: center;
+}
+
+.am-gallery .am-gallery-item img{
+    width: auto;
+}
+
+.am-gallery li{
+    padding: 0;
+}
+
+.kcbtb {
+    table-layout:fixed;
+    font-size:11px;
+    background-color: #ffffff;
+    border-color: #0084c7;
+}
+
+.kcbtb thead tr .active {
+    color: red;
+}
+
+.kcbtb tbody tr {
+    height: 80px;
+}
+
+.kcbtb tbody tr td {
+    border-color: #ffffff;
+}
+
+.kcbtb tbody tr .ktb {
+    border-color: #0084c7;
+}
+
+.kcbtb tbody tr td div {
+    margin:1px;
+    padding:2px;
+    border-radius:5px;
+}
+
+.kcbweek {
+    text-align: center;
+    font-size: 14pt;
+    background-color: #EEEEEE;
+    color: red;
+}
+

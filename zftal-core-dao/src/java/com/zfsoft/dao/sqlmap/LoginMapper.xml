@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zfsoft.dao.daointerface.ILoginDao">
+
+    <!-- <cache type="org.mybatis.caches.memcached.MemcachedCache" /> -->
+	<!--通过用户名密码获取教师信息  -->
+    <select id="getTeaxx" parameterType="LoginModel" resultType="hashmap">
+        SELECT yh.zgh      AS ZGH,
+		       yh.xm       AS XM,
+		       yh.scdljsdm AS scdljsdm,
+		       yh.sfqy     AS sfqy,
+		       yh.rylx     AS rylx,
+		       o.dwm       bmdm_id
+		  FROM zftal_xtgl_yhb yh
+		  LEFT JOIN overall o ON yh.zgh = o.gh
+	   	<where>
+			1=1
+			<if test="yhm!=null">
+			    and yh.zgh = #{yhm}
+			</if>
+			<if test="mm!=null">
+			   	and yh.mm = #{mm}
+			</if>
+		</where>	                       
+    </select>
+    
+    <!-- 通过用户名密码获取学生信息(语句需调整) -->
+    <select id="getStuxx" parameterType="LoginModel" resultType="hashmap">
+    	select xx.xh,xx.xm,bm.bmdm_id,bm.bmmc
+	        from zftal_xtgl_xsmmb mm,zftal_xtgl_xsxxb xx,zftal_xtgl_bjdmb bj,zftal_xtgl_zydmb zy,zftal_xtgl_bmdmb bm
+    	<where>
+    		mm.xh=xx.xh and xx.bjdm_id=bj.bjdm_id and bj.zydm_id=zy.zydm_id and zy.bmdm_id_lsbm=bm.bmdm_id
+    		<if test="yhm!=null">
+    			and xx.xh = #{yhm}
+    		</if>
+    		<if test="mm!=null">
+    			and mm.mm = #{mm}
+    		</if>
+    	</where>
+    </select>
+    
+    <!-- 例 -->
+    <sql id="columnSql">
+    	zgh,xm,bmdm_id,lxdh
+    </sql>
+    <sql id="wheresql">
+    	<where>
+    		<if test="zgh!=null and zgh!=''">
+    			and zgh = #{zgh}
+    		</if>
+    		<if test="xm!=null and xm !=''">
+    			and xm like '%'||'${xm}'||'%'
+    		</if>
+    		<if test="bmdm_id!=null and bmdm_id!=''">
+    			and bmdm_id = #{bmdm_id}
+    		</if>
+    		<if test="lxdh!=null and lxdh!=''">
+    			and lxdh = #{lxdh}
+    		</if>
+    	</where>
+    </sql>
+    
+    <!-- 获取用户信息结果集 -->
+    <select id="getList" resultType="hashmap" parameterType="LoginModel">
+    	select <include refid="columnSql"></include> from zftal_xtgl_yhb 
+    	<include refid="wheresql"></include>
+    </select>
+    <!-- 增加 -->
+    <!-- 查看 -->
+    <select id="viewYhxx" parameterType="LoginModel" resultType="LoginModel">
+    	select * from zftal_xtgl_yhb
+    	<where>
+    		<if test="zgh!=null">
+    			and zgh = #{zgh}
+    		</if>
+    	</where>
+    </select>
+    <!-- 修改 -->
+    <update id="updateYhxx" parameterType="LoginModel">
+    	update zftal_xtgl_yhb 
+    	<set>
+    		<if test="xm != null">
+    			xm = #{xm},
+    		</if>
+    		<if test="lxdh != null">
+    			lxdh = #{lxdh},
+    		</if>
+    		<if test="bmdm_id != null">
+    			bmdm_id = #{bmdm_id},
+    		</if>
+    		<if test="errlogin != null">
+                dlsbxx = #{errlogin},
+            </if>
+    	</set>
+    	where zgh = #{zgh}
+    </update>
+    <!-- 批量删除 -->
+    <delete id="deleteYhxx">
+    	delete from zftal_xtgl_yhb where zgh in 
+    	<foreach collection="array" item="obj" open="(" close=")" separator=",">
+    		#{obj}
+    	</foreach>
+    </delete>
+    
+    
+    <!-- 查询教师功能模块代码列表 -->
+    <select id="queryTeaGnmkdm" resultType="hashmap" parameterType="LoginModel">
+    	select gnmkdm,gnmkmc,fjgndm,dyym,xssx from zftal_xtgl_jsgnmkdmb
+    	<where>
+    	 	<if test="fjgndm != null">
+    	    	and fjgndm = #{fjgndm}
+    	    </if>
+    		<if test="yhm!=null">
+    			and 1=1
+    		</if>
+    	</where>
+    	order by to_number(xssx)
+    </select>
+    
+    <!-- 查询学生功能模块代码列表 -->
+    <select id="queryStuGnmkdm" resultType="hashmap" parameterType="LoginModel">
+    	select gnmkdm,gnmkmc,fjgndm,dyym,xssx from zftal_xtgl_xsgnmkdmb
+    	<where>
+    	    <if test="fjgndm != null">
+    	    	and fjgndm = #{fjgndm}
+    	    </if>
+    		<if test="yhm!=null">
+    			and 1=1
+    		</if>
+    	</where>
+    	order by to_number(xssx)
+    </select>
+    
+    <!-- 查询功能模块代码列表 -->
+    <select id="queryGnmkdmList" resultType="hashmap" parameterType="LoginModel">
+    	select gnmkdm,gnmkmc,fjgndm,dyym,xssx from zftal_xtgl_jsgnmkdmb 
+    	<where>
+    	    <if test="fjgndm != null">
+    	    	and fjgndm = #{fjgndm}
+    	    </if>
+    	</where>
+    	order by to_number(xssx)
+    </select>
+    
+     <!-- 查询三级功能模块代码列表 -->
+    <select id="querySjGnmkdmList" resultType="hashmap" parameterType="LoginModel">
+    	select gnmkdm,gnmkmc,fjgndm,dyym,xssx from zftal_xtgl_jsgnmkdmb 
+    	<where>
+    	    <if test="fjgndm != null">
+    	    	and substr(fjgndm,0,3) = #{fjgndm} and length(fjgndm) = 5
+    	    </if>
+    	</where>
+    	order by to_number(xssx)
+    </select>
+    
+</mapper>
