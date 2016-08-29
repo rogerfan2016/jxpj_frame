@@ -1,1 +1,0 @@
-java -jar Excel2Properties.jar properties.xls
